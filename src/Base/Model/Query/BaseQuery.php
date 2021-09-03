@@ -128,6 +128,12 @@ class BaseQuery
         return $this->infoFieldIs('No', $no);
     }
 
+    final public function noIn($no_list)
+    {
+        Kit::ensureArray($no_list);
+        return $this->infoFieldIn('No', $no_list);
+    }
+
     final public function hasInfoField($field_name)
     {
         Kit::ensureString($field_name);
