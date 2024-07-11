@@ -111,21 +111,21 @@ abstract class BaseService extends BaseController
                 throw new UserException(
                     "Handler($class_name :: $method_name) is not accessible.", $execution_record);
 
-            $config_model_name = $this->configModelName;
-            if (TRUE === is_null($config_model_name) OR TRUE === is_null($this->$config_model_name))
-                throw new UserException("Config model($config_model_name) not loaded in $class_name.");
+            // $config_model_name = $this->configModelName;
+            // if (TRUE === is_null($config_model_name) OR TRUE === is_null($this->$config_model_name))
+                // throw new UserException("Config model($config_model_name) not loaded in $class_name.");
             // Method validateModelPrivilege should throw exception if the validation fails.
-            $execution_record['validateModelPrivilege']
-                = $this->$config_model_name->validateModelPrivilege($handler_suffix, $method_name);
+            // $execution_record['validateModelPrivilege']
+                // = $this->$config_model_name->validateModelPrivilege($handler_suffix, $method_name);
 
-            $data_model_name = $this->dataModelName;
-            if (TRUE === is_null($data_model_name) OR TRUE === is_null($this->$data_model_name))
-                throw new UserException("Data model($data_model_name) not loaded in $class_name.");
+            // $data_model_name = $this->dataModelName;
+            // if (TRUE === is_null($data_model_name) OR TRUE === is_null($this->$data_model_name))
+                // throw new UserException("Data model($data_model_name) not loaded in $class_name.");
             // Method validateInput should throw exception if the validation fails,
             // and it should load the config model and fetch the config info itself.
-            $input_validation_result
-                = $execution_record['validateInput']
-                = $this->$data_model_name->validateInput($method_name, $input);
+            // $input_validation_result
+                // = $execution_record['validateInput']
+                // = $this->$data_model_name->validateInput($method_name, $input);
             // Now the validation passed.
             
             $execution_record['is_time_consuming'] = $is_time_consuming = $arg_list[0];
@@ -134,12 +134,13 @@ abstract class BaseService extends BaseController
             $execution_record['need_lock'] = $this->needLock = $arg_list[1];
 
             // Method sanitizeInput should load the config model and fetch the config info itself.
-            $input_sanitization_result // a list
-                = $execution_record['sanitizeInput']
-                = $this->$data_model_name->sanitizeInput(
-                    $method_name, $input, $input_validation_result);
+            // $input_sanitization_result // a list
+                // = $execution_record['sanitizeInput']
+                // = $this->$data_model_name->sanitizeInput(
+                    // $method_name, $input, $input_validation_result);
             
-            $this->$method_name($input_sanitization_result);
+            // $this->$method_name($input_sanitization_result);
+            $this->$method_name($input);
             $service_result
                 = $execution_record['service_result']
                 = Kit::extract($this->result, [ 'data', 'status' ]);
@@ -156,21 +157,23 @@ abstract class BaseService extends BaseController
             // Method validateServiceResult should throw exception if the validation fails,
             // and it should load the config model and fetch the config info itself.
             // @CAUTION 
-            $service_result_validation_result
-                = $execution_record['validateServiceResult']
-                = $this->$data_model_name->validateServiceResult($method_name, $service_result);
+            // $service_result_validation_result
+                // = $execution_record['validateServiceResult']
+                // = $this->$data_model_name->validateServiceResult($method_name, $service_result);
             // Now the validation passed.
             
             // Method sanitizeServiceResult should load the config model
             // and fetch the config info itself.
-            $service_result_sanitization_result
-                = $execution_record['sanitizeServiceResult']
-                = $this->$data_model_name->sanitizeServiceResult(
-                    $method_name, $service_result, $service_result_validation_result);
+            // $service_result_sanitization_result
+                // = $execution_record['sanitizeServiceResult']
+                // = $this->$data_model_name->sanitizeServiceResult(
+                    // $method_name, $service_result, $service_result_validation_result);
             // $service_result_validation_result should contains
             // and only contains three fields: code, data, status.
-            $this->result['data'] = $computation_data = $service_result_sanitization_result['data'];
-            $this->result['status'] = $operation_status = $service_result_sanitization_result['status'];
+            // $this->result['data'] = $computation_data = $service_result_sanitization_result['data'];
+            $this->result['data'] = $computation_data = $service_result['data'];
+            // $this->result['status'] = $operation_status = $service_result_sanitization_result['status'];
+            $this->result['status'] = $operation_status = $service_result['status'];
             
             $this->succeedRequest($execution_id, $execution_record);
         } catch (Exception $e) {
@@ -396,12 +399,12 @@ abstract class BaseService extends BaseController
         $this->result += [ 'micro_timestamp' => Kit::microTimestampAtNow() ];
         if (TRUE === is_null($this->result['mainException'])) unset($this->result['mainException']);
         if (TRUE === is_null($this->result['monitor'])) unset($this->result['monitor']);
-        $this->loadCore('Log/RequestLog')->addRequestLog(
-            $execution_record['class'],
-            $execution_record['method'],
-            $this->result,
-            $this->getCode()
-        );
+        // $this->loadCore('Log/RequestLog')->addRequestLog(
+        //     $execution_record['class'],
+        //     $execution_record['method'],
+        //     $this->result,
+        //     $this->getCode()
+        // );
         if (TRUE === Debug::isProduction()) {
             unset($this->result['mainException']);
             unset($this->result['monitor']);

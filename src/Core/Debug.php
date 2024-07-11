@@ -144,7 +144,7 @@ final class Debug
         $result += self::getDebugInfo();
         if (TRUE === is_null($result['mainException'])) unset($result['mainException']);
         if (TRUE === is_null($result['monitor'])) unset($result['monitor']);
-        Loader::loadCore('Log/RequestLog')->addRequestLog(NULL, NULL, $result, 0);
+        // Loader::loadCore('Log/RequestLog')->addRequestLog(NULL, NULL, $result, 0);
         if (TRUE === self::isProduction()) {
             unset($result['error']);
             unset($result['exception']);

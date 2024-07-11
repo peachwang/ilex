@@ -91,7 +91,7 @@ final class Input
                 throw new UserException(json_last_error_msg(), $input);
         }
         if (FALSE === is_null($data)) self::merge('post', $data);
-        $limit = 1000000;
+        $limit = 10000000;
         if (Kit::len(json_encode(self::input())) > $limit) 
             throw new UserException("Input size exceeds limit($limit).");
     }
